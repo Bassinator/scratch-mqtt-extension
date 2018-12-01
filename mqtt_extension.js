@@ -8,15 +8,17 @@ new (function() {
   console.log( textStatus ); // Success
   console.log( jqxhr.status ); // 200
   console.log( "Load was performed." );
+  MQTTconnect();
   });
   $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){});
 
   var mqtt;
   var reconnectTimeout = 2000;
   var messagePayload = '';
+  var messageQueue = [];
 
-  host = 'localhost';
-  port = 9001;
+  host = 'test.mosquitto.org';
+  port = 8080;
   topic = '/scratchExtensionTopic';		// topic to subscribe to
   useTLS = false;
   username = null;
@@ -62,14 +64,11 @@ new (function() {
     mqtt.connect(options);
   }
 
-  MQTTconnect();
 
 
     function onMessageArrived(message) {
         console.log("message arrived " + message.payloadString);
-        var topic = message.destinationName;
-        messagePayload = message.payloadString;
-        message_arrived = true;
+        messageQueue.push(message.payloadString);
     };
 
     function onConnect() {
@@ -88,7 +87,6 @@ new (function() {
     };
 
     var ext = this;
-    var message_arrived = false; // This becomes true after a new message arrived
 
     // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
@@ -99,10 +97,8 @@ new (function() {
         return {status: 2, msg: 'Ready'};
     };
 
-    ext.last_message = function() {
-      var lastMessage = messagePayload;
-      messagePayload = '';
-      return lastMessage;
+    ext.get_message = function() {
+      return messagePayload;
     }
 
     ext.send_message = function(message) {
@@ -111,11 +107,11 @@ new (function() {
       console.log("message published");
     };
 
-    ext.when_message_arrived = function() {
+    ext.message_arrived = function() {
        // Reset alarm_went_off if it is true, and return true
        // otherwise, return false
-       if (message_arrived === true) {
-           message_arrived = false;
+       if (messageQueue.length > 0) {
+           messagePayload  = messageQueue.shift();
            return true;
        }
        return false;
@@ -126,8 +122,8 @@ new (function() {
     var descriptor = {
         blocks: [
             ['', 'send message %s', 'send_message', 'message'],
-            ['r', 'las message', 'last_message'],
-            ['h', 'when new message arrived', 'when_message_arrived'],
+            ['r', 'message', 'get_message'],
+            ['h', 'when message arrived', 'message_arrived'],
         ]
     };
 
