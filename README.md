@@ -1,11 +1,14 @@
 # scratch-mqtt-extension
 
-Scratch extension to send an receive mqtt messages
+## Config
+You can configure the following settings regarding the mqtt broker.
+`host` of the broker
+`port` to connect
+`secure` = true if you connect to an ssl port
 
-## Limitations
-### Hard Coded configs
-- mqtt_broker: test.mosquitto.ort:8080 (unsecure websocket)
-- mqtt_topic: /scratchExtensionTopic
+if you connect the newest set settings are used
 
-### Works only via http not https
-Because the extension connects to unseciure websocket it will only work on http://scratchx.org not https://scratchx.org
+## default Settings
+host: test.mosquitto.org
+port: 8081
+secure: yes
