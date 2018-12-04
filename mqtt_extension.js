@@ -8,7 +8,7 @@ new (function() {
   console.log( textStatus ); // Success
   console.log( jqxhr.status ); // 200
   console.log( "Load was performed." );
-  MQTTconnect();
+
   });
   $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){});
 
@@ -18,9 +18,9 @@ new (function() {
   var messageQueue = [];
 
   host = 'test.mosquitto.org';
-  port = 8080;
+  port = 8081;
   topic = '/scratchExtensionTopic';		// topic to subscribe to
-  useTLS = false;
+  useTLS = true;
   username = null;
   password = null;
   cleansession = true;
@@ -97,6 +97,28 @@ new (function() {
         return {status: 2, msg: 'Ready'};
     };
 
+    ext.set_url = function(_host) {
+      host = _host;
+    };
+
+    ext.set_port = function(_port) {
+      port = _port;
+    };
+
+
+    ext.connect = function() {
+      MQTTconnect();
+    };
+
+    ext.set_TLS = function(_useTLS) {
+      if ( _useTLS == "true") {
+        useTLS = true;
+      };
+      if ( _useTLS == "false") {
+        useTLS = false;
+      };
+    };
+
     ext.get_message = function() {
       return messagePayload;
     }
@@ -121,10 +143,17 @@ new (function() {
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['', 'send message %s', 'send_message', 'message'],
+            [' ', 'send message %s', 'send_message', 'message'],
             ['r', 'message', 'get_message'],
             ['h', 'when message arrived', 'message_arrived'],
-        ]
+            [' ', 'secure connection  %m.secureConnection', 'set_TLS', 'true'],
+            [' ', 'Host %s', 'set_host', 'test.mosquitto.org'],
+            [' ', 'Port %n', 'set_port', 8081],
+            [' ', 'connect', 'connect'],
+        ],
+        menus: {
+            secureConnection: ['true', 'false'],
+        },
     };
 
     // Register the extension
