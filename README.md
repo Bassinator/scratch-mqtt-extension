@@ -9,6 +9,8 @@ You can configure the following settings regarding the mqtt broker.
 
 if you connect the newest set settings are used
 
+if you want to use an unsecure connection you must load http://scratchx.org instead of https://scratchx.org
+
 ## default Settings
 host: test.mosquitto.org
 port: 8081
