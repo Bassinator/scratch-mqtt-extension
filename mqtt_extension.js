@@ -101,6 +101,10 @@ new (function() {
       host = _host;
     };
 
+    ext.set_topic = function(_topic) {
+      topic = _topic;
+    };
+
     ext.set_port = function(_port) {
       port = _port;
     };
@@ -148,6 +152,7 @@ new (function() {
             ['h', 'when message arrived', 'message_arrived'],
             [' ', 'secure connection  %m.secureConnection', 'set_TLS', 'true'],
             [' ', 'Host %s', 'set_host', 'test.mosquitto.org'],
+            [' ', 'Topic %s', 'set_topic', '/scratchExtensionTopic'],
             [' ', 'Port %n', 'set_port', 8081],
             [' ', 'connect', 'connect'],
         ],
