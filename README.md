@@ -1,4 +1,5 @@
 # scratch-mqtt-extension
+With this connection you can connect to an mqtt broker to send and receive messages from/to other hosts/programs.
 
 ## Config
 You can configure the following settings regarding the mqtt broker.
