@@ -1,14 +1,13 @@
 /* Extension demonstrating a hat block */
 /* Sayamindu Dasgupta <sayamindu@media.mit.edu>, May 2014 */
 
-new (function() {
+(function(ext) {
 
   $.getScript("https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js", function( data, textStatus, jqxhr ) {
   console.log( data ); // Data returned
   console.log( textStatus ); // Success
   console.log( jqxhr.status ); // 200
   console.log( "Load was performed." );
-
   });
   $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){});
 
@@ -86,7 +85,7 @@ new (function() {
         $('#status').val("connection lost: " + response.errorMessage + ". Reconnecting");
     };
 
-    var ext = this;
+    //var ext = this;
 
     // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
