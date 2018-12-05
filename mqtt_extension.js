@@ -8,7 +8,6 @@
     console.log(textStatus); // Success
     console.log(jqxhr.status); // 200
     console.log("Load was performed.");
-
   });
   $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function () {});
 
@@ -87,6 +86,8 @@
     setTimeout(MQTTconnect, reconnectTimeout);
     $('#status').val("connection lost: " + response.errorMessage + ". Reconnecting");
   };
+
+  //var ext = this;
 
   // Cleanup function when the extension is unloaded
   ext._shutdown = function () {};
