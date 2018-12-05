@@ -1,16 +1,17 @@
 /* Extension demonstrating a hat block */
 /* Sayamindu Dasgupta <sayamindu@media.mit.edu>, May 2014 */
 
-new(function () {
+(function(ext) {
 
-  $.getScript("https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js", function (data, textStatus, jqxhr) {
-    console.log(data); // Data returned
-    console.log(textStatus); // Success
-    console.log(jqxhr.status); // 200
-    console.log("Load was performed.");
-
+  $.getScript("https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js", function( data, textStatus, jqxhr ) {
+  console.log( data ); // Data returned
+  console.log( textStatus ); // Success
+  console.log( jqxhr.status ); // 200
+  console.log( "Load was performed." );
   });
-  $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function () {});
+
+  console.log( "another log" ); // 200
+  $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){});
 
   var mqtt;
   var reconnectTimeout = 2000;
@@ -19,7 +20,7 @@ new(function () {
 
   host = 'test.mosquitto.org';
   port = 8081;
-  topic = '/scratchExtensionTopic'; // topic to subscribe to
+  topic = '/scratchExtensionTopic';		// topic to subscribe to
   useTLS = true;
   username = null;
   password = null;
@@ -48,124 +49,118 @@ new(function () {
       cleanSession: cleansession,
       onSuccess: onConnect,
       onFailure: function (message) {
-        $('#status').val("Connection failed: " + message.errorMessage + "Retrying");
-        setTimeout(MQTTconnect, reconnectTimeout);
-      }
-    };
+          $('#status').val("Connection failed: " + message.errorMessage + "Retrying");
+          setTimeout(MQTTconnect, reconnectTimeout);
+    }
+  };
 
     mqtt.onConnectionLost = onConnectionLost;
     mqtt.onMessageArrived = onMessageArrived;
 
     if (username != null) {
-      options.userName = username;
-      options.password = password;
+        options.userName = username;
+        options.password = password;
     }
-    console.log("Host=" + host + ", port=" + port + ", path=" + path + " TLS = " + useTLS + " username=" + username + " password=" + password);
+    console.log("Host="+ host + ", port=" + port + ", path=" + path + " TLS = " + useTLS + " username=" + username + " password=" + password);
     mqtt.connect(options);
   }
 
 
 
-  function onMessageArrived(message) {
-    console.log("message arrived " + message.payloadString);
-    messageQueue.push(message.payloadString);
-  };
-
-  function onConnect() {
-    console.log("trying to connect");
-    $('#status').val('Connected to ' + host + ':' + port + path);
-    // Connection succeeded; subscribe to our topic
-    mqtt.subscribe(topic, {
-      qos: 0
-    });
-    $('#topic').val(topic);
-
-  };
-
-
-  function onConnectionLost(response) {
-    setTimeout(MQTTconnect, reconnectTimeout);
-    $('#status').val("connection lost: " + response.errorMessage + ". Reconnecting");
-  };
-
-  var ext = this;
-
-  // Cleanup function when the extension is unloaded
-  ext._shutdown = function () {};
-
-  // Status reporting code
-  // Use this to report missing hardware, plugin or unsupported browser
-  ext._getStatus = function () {
-    return {
-      status: 2,
-      msg: 'Ready'
+    function onMessageArrived(message) {
+        console.log("message arrived " + message.payloadString);
+        messageQueue.push(message.payloadString);
     };
-  };
 
-  ext.set_url = function (_host) {
-    host = _host;
-  };
+    function onConnect() {
+        console.log("trying to connect");
+        $('#status').val('Connected to ' + host + ':' + port + path);
+        // Connection succeeded; subscribe to our topic
+        mqtt.subscribe(topic, {qos: 0});
+        $('#topic').val(topic);
 
-  ext.set_topic = function (_topic) {
-    topic = _topic;
-  };
-
-  ext.set_port = function (_port) {
-    port = _port;
-  };
-
-
-  ext.connect = function () {
-    MQTTconnect();
-  };
-
-  ext.set_TLS = function (_useTLS) {
-    if (_useTLS == "true") {
-      useTLS = true;
     };
-    if (_useTLS == "false") {
-      useTLS = false;
+
+
+    function onConnectionLost(response) {
+        setTimeout(MQTTconnect, reconnectTimeout);
+        $('#status').val("connection lost: " + response.errorMessage + ". Reconnecting");
     };
-  };
 
-  ext.get_message = function () {
-    return messagePayload;
-  }
 
-  ext.send_message = function (message) {
-    //console.log("trying to published message");
-    mqtt.send(topic, message);
-    console.log("message published");
-  };
+    // Cleanup function when the extension is unloaded
+    ext._shutdown = function() {};
 
-  ext.message_arrived = function () {
-    // Reset alarm_went_off if it is true, and return true
-    // otherwise, return false
-    if (messageQueue.length > 0) {
-      messagePayload = messageQueue.shift();
-      return true;
+    // Status reporting code
+    // Use this to report missing hardware, plugin or unsupported browser
+    ext._getStatus = function() {
+        return {status: 2, msg: 'Ready'};
+    };
+
+    ext.set_url = function(_host) {
+      host = _host;
+    };
+
+    ext.set_topic = function(_topic) {
+      topic = _topic;
+    };
+
+    ext.set_port = function(_port) {
+      port = _port;
+    };
+
+
+    ext.connect = function() {
+      MQTTconnect();
+    };
+
+    ext.set_TLS = function(_useTLS) {
+      if ( _useTLS == "true") {
+        useTLS = true;
+      };
+      if ( _useTLS == "false") {
+        useTLS = false;
+      };
+    };
+
+    ext.get_message = function() {
+      return messagePayload;
     }
-    return false;
-  };
+
+    ext.send_message = function(message) {
+      //console.log("trying to published message");
+      mqtt.send(topic, message);
+      console.log("message published");
+    };
+
+    ext.message_arrived = function() {
+       // Reset alarm_went_off if it is true, and return true
+       // otherwise, return false
+       if (messageQueue.length > 0) {
+           messagePayload  = messageQueue.shift();
+           return true;
+       }
+       return false;
+    };
 
 
-  // Block and block menu descriptions
-  var descriptor = {
-    blocks: [
-      [' ', 'send message %s', 'send_message', 'message'],
-      ['r', 'message', 'get_message'],
-      ['h', 'when message arrived', 'message_arrived'],
-      [' ', 'secure connection  %m.secureConnection', 'set_TLS', 'true'],
-      [' ', 'Host %s', 'set_host', 'test.mosquitto.org'],
-      [' ', 'Topic %s', 'set_topic', '/scratchExtensionTopic'],
-      [' ', 'Port %n', 'set_port', 8081],
-      [' ', 'connect', 'connect'],
-    ],
-    menus: {
-      secureConnection: ['true', 'false'],
-    },
-  };
+    // Block and block menu descriptions
+    var descriptor = {
+        blocks: [
+            [' ', 'send message %s', 'send_message', 'message'],
+            ['r', 'message', 'get_message'],
+            ['h', 'when message arrived', 'message_arrived'],
+            [' ', 'secure connection  %m.secureConnection', 'set_TLS', 'true'],
+            [' ', 'Host %s', 'set_host', 'test.mosquitto.org'],
+            [' ', 'Topic %s', 'set_topic', '/scratchExtensionTopic'],
+            [' ', 'Port %n', 'set_port', 8081],
+            [' ', 'connect', 'connect'],
+        ],
+        menus: {
+            secureConnection: ['true', 'false'],
+        },
+    };
 
-  // Register the extension
-  ScratchExtensions.register('Alarm extension', descriptor, ext);
-})();
+    // Register the extension
+    ScratchExtensions.register('Alarm extension', descriptor, ext);
+})({});
