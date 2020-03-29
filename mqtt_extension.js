@@ -10,9 +10,9 @@
   console.log( "Load was performed." );
   });
 
-  $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){
-  console.log( "another log" ); // 200
-  });
+  //$.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){
+  //console.log( "another log" ); // 200
+  //});
 
 
   var mqtt;
