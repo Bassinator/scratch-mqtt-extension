@@ -4,13 +4,8 @@
 (function(ext) {
 
   $.getScript("https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js", function( data, textStatus, jqxhr ) {
-  console.log( data ); // Data returned
-  console.log( textStatus ); // Success
-  console.log( jqxhr.status ); // 200
-  console.log( "Load was performed." );
   });
 
-  console.log( "another log" ); // 200
   $.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){});
 
   var mqtt;
@@ -25,8 +20,6 @@
   username = null;
   password = null;
   cleansession = true;
-
-  console.log("timeout=" + reconnectTimeout);
 
 
   function MQTTconnect() {
@@ -158,5 +151,5 @@
     };
 
     // Register the extension
-    ScratchExtensions.register('Alarm extension', descriptor, ext);
+    ScratchExtensions.register('MQTT Extension', descriptor, ext);
 })({});
