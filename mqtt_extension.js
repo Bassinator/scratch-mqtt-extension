@@ -151,7 +151,7 @@
             ['b', 'message arrived', 'message_arrived'],
             [' ', 'secure connection  %m.secureConnection', 'set_TLS', 'true'],
             [' ', 'Host %s', 'set_host', 'test.mosquitto.org'],
-            [' ', 'Topic %s', 'set_topic', '/scratchExtensionTopic'],
+            [' ', 'Subscribe to topic %s', 'set_topic', '/scratchExtensionTopic'],
             [' ', 'Port %n', 'set_port', 8081],
             [' ', 'connect', 'connect'],
         ],
