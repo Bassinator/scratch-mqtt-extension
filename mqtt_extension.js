@@ -8,7 +8,6 @@
   console.log( textStatus ); // Success
   console.log( jqxhr.status ); // 200
   console.log( "Load was performed." );
-  state = {status: 1, msg: 'loaded'};
   });
 
   //$.getScript("https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js", function(){
@@ -28,7 +27,7 @@
   username = null;
   password = null;
   cleansession = true;
-  state = {status: 0, msg: 'initializing'};
+  state = {status: 1, msg: 'loaded'};
 
 
   function MQTTconnect() {
