@@ -128,8 +128,8 @@
       return messagePayload;
     }
 
-    ext.send_message = function(message) {
-      mqtt.send(topic, message);
+    ext.send_message = function(message, _topic) {
+      mqtt.send(_topic, message);
       console.log("message published");
     };
 
@@ -145,7 +145,7 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            [' ', 'send message %s', 'send_message', 'message'],
+            [' ', 'send message %s to topic %s', 'send_message', 'message', 'topic'],
             ['r', 'message', 'get_message'],
             ['h', 'when message arrived', 'message_arrived'],
             ['b', 'message arrived', 'message_arrived'],
