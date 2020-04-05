@@ -27,6 +27,7 @@
   username = null;
   password = null;
   cleansession = true;
+  state = {status: 0, msg: 'initializing'};
 
 
   function MQTTconnect() {
@@ -75,15 +76,17 @@
 
     function onConnect() {
         console.log("trying to connect");
+        state = {status: 1, msg: 'connecting ...'};
         $('#status').val('Connected to ' + host + ':' + port + path);
         // Connection succeeded; subscribe to our topic
         mqtt.subscribe(topic, {qos: 0});
         $('#topic').val(topic);
-
+        state = {status: 2, msg: 'conected'};
     };
 
 
     function onConnectionLost(response) {
+        state = {status: 1, msg: 'connecting ...'};
         setTimeout(MQTTconnect, reconnectTimeout);
         $('#status').val("connection lost: " + response.errorMessage + ". Reconnecting");
     };
@@ -92,7 +95,7 @@
     ext._shutdown = function() {};
 
     ext._getStatus = function() {
-        return {status: 2, msg: 'Ready'};
+        return state;
     };
 
     ext.set_host = function(_host) {
